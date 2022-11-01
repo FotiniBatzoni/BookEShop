@@ -1,4 +1,5 @@
 ﻿using BookEShopWeb.Data;
+using BookEShopWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookEShopWeb.Controllers
@@ -14,8 +15,8 @@ namespace BookEShopWeb.Controllers
 
         public IActionResult Index()
         {
-            var objCategoryList = _db.Categories.ToList();
-            return View();
+            IEnumerable<Category> objCategoryList = _db.Categories;
+            return View(objCategoryList);
         }
     }
 }
