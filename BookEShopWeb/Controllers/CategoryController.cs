@@ -1,6 +1,7 @@
 ﻿using BookEShopWeb.Data;
 using BookEShopWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BookEShopWeb.Controllers
 {
@@ -48,19 +49,22 @@ namespace BookEShopWeb.Controllers
         //GET
         public IActionResult Edit(int? id)
         {
-            if(id== null || id==0)
+
+            Debug.WriteLine(id);
+            if (id== null || id==0)
             {
                 return NotFound();
             }
-            var categoryFromDatabase = _db.Categories.Find(id);
+            var categoryFromDb = _db.Categories.Find(id);
+            Debug.WriteLine(categoryFromDb.Name);
             //var categoryFromDbFirst = _db.Categories.FirstOrDefault(c => c.Id == id);
             //var categoryFromDbSingle = _db.Categories.SingleOrDefault(c => c.Id == id);
 
-            if(categoryFromDatabase==null)
+            if(categoryFromDb==null)
             {
                 return NotFound();
             }
-            return View(categoryFromDatabase);
+            return View(categoryFromDb);
         }
 
         //POST
