@@ -39,6 +39,7 @@ namespace BookEShopWeb.Controllers
             {
                 _db.Categories.Add(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category is created successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -80,6 +81,7 @@ namespace BookEShopWeb.Controllers
             {
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
+                TempData["success"] = "Category is updated successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -120,6 +122,7 @@ namespace BookEShopWeb.Controllers
 
             _db.Categories.Remove(obj);
             _db.SaveChanges();
+            TempData["success"] = "Category is deleted successfully";
             return RedirectToAction("Index");
         }
     }
