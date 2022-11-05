@@ -1,5 +1,5 @@
-﻿using BookEShopWeb.Data;
-using BookEShopWeb.Models;
+﻿using BookEShop.DataAccess;
+using BookEShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
