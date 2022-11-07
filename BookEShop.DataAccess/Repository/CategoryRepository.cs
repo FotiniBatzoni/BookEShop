@@ -29,9 +29,5 @@ namespace BookEShop.DataAccess.Repository
             _db.Categories.Update(obj);
         }
 
-        IEnumerable<Category> IRepository<Category>.GetAll()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
