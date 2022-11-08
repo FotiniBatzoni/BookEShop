@@ -12,7 +12,9 @@ namespace BookEShop.Models
         [Key]
         public int Id { get; set; }
 
+        [Display(Name ="Cover Type")]
         [Required]
+        [MaxLength()]
         public string Name { get; set; }
     }
 }
