@@ -11,6 +11,8 @@ namespace BookEShop.DataAccess.Repository
     {
         ICategoryRepository Category{ get; }
 
+        ICoverTypeRepository CoverType{ get; }
+
         void Save();
     }
 }
