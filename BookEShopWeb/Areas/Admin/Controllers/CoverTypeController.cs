@@ -55,11 +55,11 @@ namespace BookEShopWeb.Controllers
             {
                 return NotFound();
             }
-            //var categoryFromDb = _db.Categories.Find(id);
+            //var categoryFromDb = _db.CoverType.Find(id);
             var coverTypeFromDbFirst = _unitOfWork.CoverType.GetFirstOrDefault(c => c.Id == id);
-            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(c => c.Id == id);
+            //var categoryFromDbSingle = _db.CoverType.SingleOrDefault(c => c.Id == id);
 
-            if(coverTypeFromDbFirst == null)
+            if (coverTypeFromDbFirst == null)
             {
                 return NotFound();
             }
@@ -91,9 +91,9 @@ namespace BookEShopWeb.Controllers
             {
                 return NotFound();
             }
-            // var categoryFromDb = _db.Categories.Find(id);
+            // var categoryFromDb = _db.CoverType.Find(id);
             var coverTypeFromDbFirst = _unitOfWork.CoverType.GetFirstOrDefault(c => c.Id == id);
-            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(c => c.Id == id);
+            //var categoryFromDbSingle = _db.CoverType.SingleOrDefault(c => c.Id == id);
 
             if (coverTypeFromDbFirst == null)
             {
