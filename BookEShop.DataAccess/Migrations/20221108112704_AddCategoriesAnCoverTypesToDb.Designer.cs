@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BookEShopWeb.Migrations
+namespace BookEShop.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221108103300_AddTypeCoverToDb")]
-    partial class AddTypeCoverToDb
+    [Migration("20221108112704_AddCategoriesAnCoverTypesToDb")]
+    partial class AddCategoriesAnCoverTypesToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

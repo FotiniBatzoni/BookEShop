@@ -14,7 +14,7 @@ namespace BookEShop.Models
 
         [Display(Name ="Cover Type")]
         [Required]
-        [MaxLength()]
+        [MaxLength(50)]
         public string Name { get; set; }
     }
 }
