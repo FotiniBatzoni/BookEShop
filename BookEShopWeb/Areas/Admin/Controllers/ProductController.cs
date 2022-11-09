@@ -3,6 +3,7 @@ using BookEShop.DataAccess.Repository;
 using BookEShop.DataAccess.Repository.IRepository;
 using BookEShop.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace BookEShopWeb.Controllers
@@ -29,6 +30,20 @@ namespace BookEShopWeb.Controllers
         public IActionResult Upsert(int? id)
         {
             Product product = new();
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork.Category.GetAll().Select(
+                u=> new SelectListItem
+                {
+                    Text= u.Name,  
+                    Value=u.Id.ToString(),
+                }
+            );
+            IEnumerable<SelectListItem> CoverTypeList = _unitOfWork.CoverType.GetAll().Select(
+                u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString(),
+                }
+            );
             Debug.WriteLine(id);
             if (id== null || id==0)
             {
