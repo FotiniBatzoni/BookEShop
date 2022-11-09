@@ -13,6 +13,8 @@ namespace BookEShop.DataAccess.Repository
 
         ICoverTypeRepository CoverType{ get; }
 
+        IProductRepository Product { get; }
+
         void Save();
     }
 }
