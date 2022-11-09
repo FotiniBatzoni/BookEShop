@@ -49,6 +49,7 @@ namespace BookEShopWeb.Controllers
             {
                 //create product
                 ViewBag.CategoryList = CategoryList;
+                ViewData["CoverTypeList"] = CoverTypeList;
                 return View(product);
             }
             else
