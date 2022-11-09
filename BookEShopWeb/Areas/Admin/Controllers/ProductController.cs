@@ -23,53 +23,29 @@ namespace BookEShopWeb.Controllers
             return View(objProductList);
         }
 
-        //GET
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Product obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Product.Add(obj);
-                _unitOfWork.Product.Save();
-                TempData["success"] = "Product is created successfully";
-                return RedirectToAction("Index");
-            }
-            return View(obj);
-
-        }
 
 
         //GET
-        public IActionResult Edit(int? id)
+        public IActionResult Upsert(int? id)
         {
-
+            Product product = new();
             Debug.WriteLine(id);
             if (id== null || id==0)
             {
-                return NotFound();
+                return View(product);
             }
-            //var productFromDb = _db.Product.Find(id);
-            var productFromDbFirst = _unitOfWork.Product.GetFirstOrDefault(c => c.Id == id);
-            //var productFromDbSingle = _db.Product.SingleOrDefault(c => c.Id == id);
-
-            if (productFromDbFirst == null)
+            else
             {
-                return NotFound();
+
             }
-            return View(productFromDbFirst);
+        
+            return View(product);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product obj)
+        public IActionResult Upsert(Product obj)
         {
             
             if (ModelState.IsValid)
