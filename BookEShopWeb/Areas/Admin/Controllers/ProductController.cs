@@ -23,8 +23,9 @@ namespace BookEShopWeb.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Product> objProductList = _unitOfWork.Product.GetAll();
-            return View(objProductList);
+            //IEnumerable<Product> objProductList = _unitOfWork.Product.GetAll();
+            //return View(objProductList);
+            return View();
         }
 
 
@@ -128,5 +129,15 @@ namespace BookEShopWeb.Controllers
             TempData["success"] = "Product is deleted successfully";
             return RedirectToAction("Index");
         }
+
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var productList = _unitOfWork.Product.GetAll();
+            return Json(new { data = productList });
+        }
+        #endregion
     }
+
 }
