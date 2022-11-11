@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookEShop.Models.ViewModels
+namespace BookEShop.Models
 {
     public class ShoppingCard
     {
