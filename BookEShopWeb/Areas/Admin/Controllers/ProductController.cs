@@ -128,7 +128,6 @@ namespace BookEShopWeb.Controllers
 
         //POST
         [HttpDelete]
-        [ValidateAntiForgeryToken]
         public IActionResult Delete(int? id)
         {
             var obj = _unitOfWork.Product.GetFirstOrDefault(c => c.Id == id);
