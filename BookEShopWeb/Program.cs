@@ -3,6 +3,7 @@ using BookEShop.DataAccess;
 using BookEShop.DataAccess.Repository.IRepository;
 using BookEShop.DataAccess.Repository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ app.UseRouting();
 app.UseAuthentication();;
 
 app.UseAuthorization();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
