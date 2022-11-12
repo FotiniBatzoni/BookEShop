@@ -1,9 +1,10 @@
 ﻿using BookEShop.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookEShop.DataAccess;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext
 {
     //constructor 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
