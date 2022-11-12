@@ -15,6 +15,8 @@ namespace BookEShop.DataAccess.Repository
 
         IProductRepository Product { get; }
 
+        ICompanyRepository Company { get; }
+
         void Save();
     }
 }
