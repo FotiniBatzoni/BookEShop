@@ -17,6 +17,10 @@ namespace BookEShop.DataAccess.Repository
 
         ICompanyRepository Company { get; }
 
+        IApplicationUserRepository ApplicationUser { get; }
+
+        IShoppingCardRepository ShoppingCard { get; }
+
         void Save();
     }
 }
