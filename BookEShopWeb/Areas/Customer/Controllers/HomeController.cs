@@ -47,8 +47,19 @@ namespace BookEShopWeb.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCard.ApplicationUserId = claim.Value;
-            
-            _unitOfWork.ShoppingCard.Add(shoppingCard);
+
+            ShoppingCard cardFromDb = _unitOfWork.ShoppingCard.GetFirstOrDefault(
+                u => u.ApplicationUserId == claim.Value && u.ProductId == shoppingCard.ProductId);
+
+            if(cardFromDb == null)
+            {
+                _unitOfWork.ShoppingCard.Add(shoppingCard);
+            }
+            else
+            {
+                _unitOfWork.ShoppingCard.IncrementCount(cardFromDb,shoppingCard.Count);
+            }
+         
             _unitOfWork.Save();
 
             return RedirectToAction(nameof(Index));
