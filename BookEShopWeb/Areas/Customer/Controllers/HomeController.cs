@@ -2,8 +2,11 @@
 using BookEShop.DataAccess.Repository;
 using BookEShop.Models;
 using BookEShop.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Linq;
+using System.Security.Claims;
 
 namespace BookEShopWeb.Controllers
 {
@@ -25,14 +28,30 @@ namespace BookEShopWeb.Controllers
             return View(productList);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int productId)
         {
             ShoppingCard cartObj = new()
             {
                 Count = 1,
-                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,CoverType")
+                ProductId = productId,
+                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == productId, includeProperties: "Category,CoverType")
             };
             return View(cartObj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(ShoppingCard shoppingCard)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            shoppingCard.ApplicationUserId = claim.Value;
+            
+            _unitOfWork.ShoppingCard.Add(shoppingCard);
+            _unitOfWork.Save();
+
+            return RedirectToAction(nameof(Index));
         }
 
 
