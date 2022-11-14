@@ -62,7 +62,7 @@ namespace BookEShopWeb.Controllers
          
             _unitOfWork.Save();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
 

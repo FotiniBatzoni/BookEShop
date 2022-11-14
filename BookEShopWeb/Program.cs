@@ -20,6 +20,11 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProvide
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.ConfigureApplicationCookie(options => {
+    options.LoginPath = $"/Identity/Account/Login";
+    //options.LoginPath = $"/Identity/Account/Logout";
+    //options.LoginPath = $"/Identity/Account/AccessDenied";
+});
 
 var app = builder.Build();
 
