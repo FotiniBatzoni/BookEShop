@@ -32,6 +32,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             foreach(var card in ShoppingCardVM.ListCard)
             {
                 card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
+                ShoppingCardVM.CardTotal += (card.Price * card.Count);
             }
        
             return View(ShoppingCardVM);
