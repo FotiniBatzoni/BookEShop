@@ -38,6 +38,26 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             return View(ShoppingCardVM);
         }
 
+        public IActionResult Summary()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            //ShoppingCardVM = new ShoppingCardVM()
+            //{
+            //    ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
+            //    includeProperties: "Product")
+            //};
+            //foreach (var card in ShoppingCardVM.ListCard)
+            //{
+            //    card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
+            //    ShoppingCardVM.CardTotal += (card.Price * card.Count);
+            //}
+
+            //return View(ShoppingCardVM);
+            return View();
+        }
+
         public IActionResult Plus(int cartId)
         {
             var cart = _unitOfWork.ShoppingCard.GetFirstOrDefault(c => c.Id == cartId);
