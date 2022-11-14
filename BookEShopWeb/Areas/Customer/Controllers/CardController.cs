@@ -13,6 +13,8 @@ namespace BookEShopWeb.Areas.Customer.Controllers
         private readonly IUnitOfWork _unitOfWork;
         public ShoppingCardVM ShoppingCardVM { get; set; }
 
+        public int OrderTotal { get; set; }
+
         public CardController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -27,8 +29,28 @@ namespace BookEShopWeb.Areas.Customer.Controllers
                 ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
                 includeProperties:"Product")
             };
-
+            foreach(var card in ShoppingCardVM.ListCard)
+            {
+                card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
+            }
+       
             return View(ShoppingCardVM);
+        }
+
+        private double GetPriceBasedOdQuantity(double quantity, double price, double price50, double price100)
+        {
+            if (quantity <= 50)
+            {
+                return price;
+            }
+            else
+            {
+                if(quantity <= 100)
+                {
+                    return price = price50;    
+                }
+                return price100;
+            }
         }
     }
 }
