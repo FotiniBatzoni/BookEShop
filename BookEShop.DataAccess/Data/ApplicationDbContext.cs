@@ -23,4 +23,8 @@ public class ApplicationDbContext : IdentityDbContext
 
     public DbSet<ShoppingCard> ShoppingCards { get; set; }
 
+    public DbSet<OrderHeader> OrderHeaders { get; set; }
+
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+
 }
