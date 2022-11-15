@@ -13,6 +13,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
     public class CardController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        [BindProperty]
         public ShoppingCardVM ShoppingCardVM { get; set; }
 
         public int OrderTotal { get; set; }
