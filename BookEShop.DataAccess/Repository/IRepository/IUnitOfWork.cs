@@ -21,6 +21,10 @@ namespace BookEShop.DataAccess.Repository
 
         IShoppingCardRepository ShoppingCard { get; }
 
+        IOrderDetailRepository OrderDetail { get; }
+
+        IOrderHeaderRepository OrderHeader { get; }
+
         void Save();
     }
 }
