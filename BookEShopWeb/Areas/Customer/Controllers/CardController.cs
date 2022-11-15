@@ -154,10 +154,10 @@ namespace BookEShopWeb.Areas.Customer.Controllers
                 var service = new SessionService();
                 Session session = service.Create(options);
 
-                //_unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCardVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
-                //_unitOfWork.Save();
-                //Response.Headers.Add("Location", session.Url);
-                //return new StatusCodeResult(303);
+                _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCardVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                _unitOfWork.Save();
+                Response.Headers.Add("Location", session.Url);
+                return new StatusCodeResult(303);
             }
 
             else
@@ -166,7 +166,28 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             }
         }
 
-    
+
+        public IActionResult OrderConfirmation(int id)
+        {
+            OrderHeader orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == id, includeProperties: "ApplicationUser");
+            if (orderHeader.PaymentStatus != SD.PaymentStatusDelayedPayment)
+            {
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
+                //check the stripe status
+                if (session.PaymentStatus.ToLower() == "paid")
+                {
+                    _unitOfWork.OrderHeader.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    _unitOfWork.Save();
+                }
+            }
+            _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Bulky Book", "<p>New Order Created</p>");
+            List<ShoppingCard> shoppingCarts = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId ==
+            orderHeader.ApplicationUserId).ToList();
+            _unitOfWork.ShoppingCard.RemoveRange(shoppingCarts);
+            _unitOfWork.Save();
+            return View(id);
+        }
 
         public IActionResult Plus(int cartId)
         {
