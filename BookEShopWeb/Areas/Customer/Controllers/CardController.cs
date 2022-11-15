@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
 using BookEShop.DataAccess.Repository;
 using BookEShop.Models.ViewModels;
+using BookEShop.Models;
+using BookEShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -70,6 +72,50 @@ namespace BookEShopWeb.Areas.Customer.Controllers
 
             return View(ShoppingCardVM);
     
+        }
+
+        [HttpPost]
+        [ActionName("Summary")]
+        [ValidateAntiForgeryToken]
+        public IActionResult SummaryPOST()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            ShoppingCardVM.ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
+               includeProperties: "Product");
+
+            ShoppingCardVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+            ShoppingCardVM.OrderHeader.OrderStatus = SD.StatusPending;
+            ShoppingCardVM.OrderHeader.OrderDate = System.DateTime.Now;
+            ShoppingCardVM.OrderHeader.ApplicationUserId = claim.Value;
+
+            foreach (var card in ShoppingCardVM.ListCard)
+            {
+                card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
+                ShoppingCardVM.OrderHeader.OrderTotal += (card.Price * card.Count);
+            }
+
+            _unitOfWork.OrderHeader.Add(ShoppingCardVM.OrderHeader);
+            _unitOfWork.Save();
+
+            foreach (var card in ShoppingCardVM.ListCard)
+            {
+                OrderDetail orderDetail = new()
+                {
+                    ProductId = card.ProductId,
+                    OrderId = ShoppingCardVM.OrderHeader.Id,
+                    Price = card.Price,
+                    Count = card.Count,
+                };
+                _unitOfWork.OrderDetail.Add(orderDetail);
+                _unitOfWork.Save();
+            }
+
+            _unitOfWork.ShoppingCard.RemoveRange(ShoppingCardVM.ListCard);
+            _unitOfWork.Save();
+            return RedirectToAction("Index","Home");
+
         }
 
         public IActionResult Plus(int cartId)
