@@ -5,6 +5,7 @@ using BookEShop.Models;
 using BookEShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.Checkout;
 
 namespace BookEShopWeb.Areas.Customer.Controllers
 {
@@ -113,11 +114,59 @@ namespace BookEShopWeb.Areas.Customer.Controllers
                 _unitOfWork.Save();
             }
 
-            _unitOfWork.ShoppingCard.RemoveRange(ShoppingCardVM.ListCard);
-            _unitOfWork.Save();
-            return RedirectToAction("Index","Home");
+            if (applicationUser.CompanyId.GetValueOrDefault() == 0)
+            {
+                //stripe settings 
+                var domain = "https://localhost:44300/";
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string>
+                    {
+                       "card",
+                    },
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                    SuccessUrl = domain + $"customer/card/OrderConfirmation?id={ShoppingCardVM.OrderHeader.Id}",
+                    CancelUrl = domain + $"customer/card/index",
+                };
 
+                foreach (var item in ShoppingCardVM.ListCard)
+                {
+
+                    var sessionLineItem = new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmount = (long)(item.Price * 100),//20.00 -> 2000
+                            Currency = "usd",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = item.Product.Title
+                            },
+
+                        },
+                        Quantity = item.Count,
+                    };
+                    options.LineItems.Add(sessionLineItem);
+
+                }
+
+                var service = new SessionService();
+                Session session = service.Create(options);
+
+                //_unitOfWork.OrderHeader.UpdateStripePaymentID(ShoppingCardVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
+                //_unitOfWork.Save();
+                //Response.Headers.Add("Location", session.Url);
+                //return new StatusCodeResult(303);
+            }
+
+            else
+            {
+                return RedirectToAction("OrderConfirmation", "Cart", new { id = ShoppingCardVM.OrderHeader.Id });
+            }
         }
+
+    
 
         public IActionResult Plus(int cartId)
         {
