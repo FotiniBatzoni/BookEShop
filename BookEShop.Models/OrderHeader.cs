@@ -19,6 +19,7 @@ namespace BookEShop.Models
 
         public ApplicationUser ApplicationUser { get; set; }    
         
+
         [Required]
         public DateTime OrderDate { get; set; }
 

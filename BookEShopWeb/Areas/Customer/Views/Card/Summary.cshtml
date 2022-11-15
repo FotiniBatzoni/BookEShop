@@ -1,4 +1,6 @@
-﻿<form method="post">
+﻿@model BookEShop.Models.ViewModels.ShoppingCardVM
+
+<form method="post">
 	<br />
 	<div class="container">
 		<div class="card">
@@ -9,7 +11,7 @@
 						Order Summary
 					</div>
 					<div class="col-6 text-end">
-						<a class="btn btn-outline-info btn-sm">Back to Cart</a>
+						<a asp-action="Index" class="btn btn-outline-info btn-sm">Back to Cart</a>
 					</div>
 				</div>
 			</div>
@@ -27,7 +29,8 @@
 									<label>Name</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="OrderHeader.ApplicationUser.Name" class="form-control" />
+									<span asp-validation-for="OrderHeader.ApplicationUser.Name" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -35,7 +38,8 @@
 									<label>Phone</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="OrderHeader.ApplicationUser.PhoneNumber" class="form-control" />
+									<span asp-validation-for="OrderHeader.ApplicationUser.PhoneNumber" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -43,7 +47,8 @@
 									<label>Street Address</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="OrderHeader.ApplicationUser.StreetAddress" class="form-control" />
+									<span asp-validation-for="OrderHeader.ApplicationUser.StreetAddress" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -51,7 +56,8 @@
 									<label>City</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="OrderHeader.ApplicationUser.City" class="form-control" />
+									<span asp-validation-for="OrderHeader.ApplicationUser.City" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -59,7 +65,8 @@
 									<label>State</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="OrderHeader.ApplicationUser.State" class="form-control" />
+									<span asp-validation-for="OrderHeader.ApplicationUser.State" class="text-danger"></span>
 								</div>
 							</div>
 							<div class="row my-1">
@@ -67,7 +74,8 @@
 									<label>Postal Code</label>
 								</div>
 								<div class="col-9">
-									<input class="form-control" />
+									<input asp-for="OrderHeader.ApplicationUser.PostalCode" class="form-control" />
+									<span asp-validation-for="OrderHeader.ApplicationUser.PostalCode" class="text-danger"></span>
 								</div>
 							</div>
 						</div>

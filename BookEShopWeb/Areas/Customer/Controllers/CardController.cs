@@ -27,12 +27,13 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             ShoppingCardVM = new ShoppingCardVM()
             {
                 ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
-                includeProperties:"Product")
+                includeProperties:"Product"),
+                OrderHeader = new()
             };
             foreach(var card in ShoppingCardVM.ListCard)
             {
                 card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
-                ShoppingCardVM.CardTotal += (card.Price * card.Count);
+                ShoppingCardVM.OrderHeader.OrderTotal += (card.Price * card.Count);
             }
        
             return View(ShoppingCardVM);
@@ -41,21 +42,34 @@ namespace BookEShopWeb.Areas.Customer.Controllers
         public IActionResult Summary()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            //var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            //ShoppingCardVM = new ShoppingCardVM()
-            //{
-            //    ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
-            //    includeProperties: "Product")
-            //};
-            //foreach (var card in ShoppingCardVM.ListCard)
-            //{
-            //    card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
-            //    ShoppingCardVM.CardTotal += (card.Price * card.Count);
-            //}
+            ShoppingCardVM = new ShoppingCardVM()
+            {
+                ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
+               includeProperties: "Product"),
+                OrderHeader = new()
+            };
 
-            //return View(ShoppingCardVM);
-            return View();
+            ShoppingCardVM.OrderHeader.ApplicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(
+                u => u.Id == claim.Value);
+
+            //ShoppingCardVM.OrderHeader.Name = ShoppingCardVM.OrderHeader.ApplicationUser.Name;
+            //ShoppingCardVM.OrderHeader.PhoneNumber = ShoppingCardVM.OrderHeader.ApplicationUser.PhoneNumber;
+            //ShoppingCardVM.OrderHeader.StreetAddress = ShoppingCardVM.OrderHeader.ApplicationUser.StreetAddress;
+            //ShoppingCardVM.OrderHeader.City = ShoppingCardVM.OrderHeader.ApplicationUser.City;
+            //ShoppingCardVM.OrderHeader.State = ShoppingCardVM.OrderHeader.ApplicationUser.State;
+            //ShoppingCardVM.OrderHeader.PostalCode = ShoppingCardVM.OrderHeader.ApplicationUser.PostalCode;
+
+
+            foreach (var card in ShoppingCardVM.ListCard)
+            {
+                card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
+                ShoppingCardVM.OrderHeader.OrderTotal += (card.Price * card.Count);
+            }
+
+            return View(ShoppingCardVM);
+    
         }
 
         public IActionResult Plus(int cartId)
