@@ -157,6 +157,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
                 _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCardVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
                 _unitOfWork.Save();
                 Response.Headers.Add("Location", session.Url);
+             
                 return new StatusCodeResult(303);
            // }
 
