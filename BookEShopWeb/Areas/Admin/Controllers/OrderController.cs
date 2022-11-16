@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookEShopWeb.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         public OrderController(IUnitOfWork unitOfWork)
         {
-
+            _unitOfWork = unitOfWork;
         }
 
 
