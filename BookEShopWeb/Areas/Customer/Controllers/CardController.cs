@@ -1,11 +1,12 @@
-﻿using System.Security.Claims;
-using BookEShop.DataAccess.Repository;
+﻿using BookEShop.Models;
 using BookEShop.Models.ViewModels;
-using BookEShop.Models;
 using BookEShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
+using System.Collections.Generic;
+using System.Security.Claims;
+using BookEShop.DataAccess.Repository;
 
 namespace BookEShopWeb.Areas.Customer.Controllers
 {
@@ -85,49 +86,62 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             ShoppingCardVM.ListCard = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value,
-               includeProperties: "Product");
+                includeProperties: "Product");
 
-            ShoppingCardVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
-            ShoppingCardVM.OrderHeader.OrderStatus = SD.StatusPending;
+
             ShoppingCardVM.OrderHeader.OrderDate = System.DateTime.Now;
             ShoppingCardVM.OrderHeader.ApplicationUserId = claim.Value;
 
-            foreach (var card in ShoppingCardVM.ListCard)
+
+            foreach (var cart in ShoppingCardVM.ListCard)
             {
-                card.Price = GetPriceBasedOdQuantity(card.Count, card.Product.Price, card.Product.Price50, card.Product.Price100);
-                ShoppingCardVM.OrderHeader.OrderTotal += (card.Price * card.Count);
+                cart.Price = GetPriceBasedOdQuantity(cart.Count, cart.Product.Price,
+                    cart.Product.Price50, cart.Product.Price100);
+                ShoppingCardVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+            }
+            ApplicationUser applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(u => u.Id == claim.Value);
+
+            if (applicationUser.CompanyId.Equals(null) )
+            {
+                ShoppingCardVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
+                ShoppingCardVM.OrderHeader.OrderStatus = SD.StatusPending;
+            }
+            else
+            {
+                ShoppingCardVM.OrderHeader.PaymentStatus = SD.PaymentStatusDelayedPayment;
+                ShoppingCardVM.OrderHeader.OrderStatus = SD.StatusApproved;
             }
 
             _unitOfWork.OrderHeader.Add(ShoppingCardVM.OrderHeader);
             _unitOfWork.Save();
-
-            foreach (var card in ShoppingCardVM.ListCard)
+            foreach (var cart in ShoppingCardVM.ListCard)
             {
                 OrderDetail orderDetail = new()
                 {
-                    ProductId = card.ProductId,
+                    ProductId = cart.ProductId,
                     OrderId = ShoppingCardVM.OrderHeader.Id,
-                    Price = card.Price,
-                    Count = card.Count,
+                    Price = cart.Price,
+                    Count = cart.Count
                 };
                 _unitOfWork.OrderDetail.Add(orderDetail);
                 _unitOfWork.Save();
             }
 
-            //if (ApplicationUser.CompanyId.GetValueOrDefault() == 0)
-            //{
+
+            if (applicationUser.CompanyId.Equals(null))
+            {
                 //stripe settings 
-                var domain = "https://localhost:43350/";
+                var domain = "https://localhost:44300/";
                 var options = new SessionCreateOptions
                 {
                     PaymentMethodTypes = new List<string>
-                    {
-                       "card",
-                    },
+                {
+                  "card",
+                },
                     LineItems = new List<SessionLineItemOptions>(),
                     Mode = "payment",
-                    SuccessUrl = domain + $"customer/card/OrderConfirmation?id={ShoppingCardVM.OrderHeader.Id}",
-                    CancelUrl = domain + $"customer/card/index",
+                    SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCardVM.OrderHeader.Id}",
+                    CancelUrl = domain + $"customer/cart/index",
                 };
 
                 foreach (var item in ShoppingCardVM.ListCard)
@@ -153,18 +167,16 @@ namespace BookEShopWeb.Areas.Customer.Controllers
 
                 var service = new SessionService();
                 Session session = service.Create(options);
-
                 _unitOfWork.OrderHeader.UpdateStripePaymentId(ShoppingCardVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
                 _unitOfWork.Save();
                 Response.Headers.Add("Location", session.Url);
-             
                 return new StatusCodeResult(303);
-           // }
+            }
 
-            //else
-            //{
-            //    return RedirectToAction("OrderConfirmation", "Cart", new { id = ShoppingCardVM.OrderHeader.Id });
-            //}
+            else
+            {
+                return RedirectToAction("OrderConfirmation", "Card", new { id = ShoppingCardVM.OrderHeader.Id });
+            }
         }
 
 
