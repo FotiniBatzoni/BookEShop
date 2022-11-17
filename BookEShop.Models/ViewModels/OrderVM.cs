@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookEShop.Models.ViewModels
 {
-    internal class OrderVM
+    public class OrderVM
     {
         public OrderHeader OrderHeader { get; set; }
 

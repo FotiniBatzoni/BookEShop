@@ -4,6 +4,8 @@ using BookEShop.Models;
 using BookEShop.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using BookEShop.Models.ViewModels;
+
 
 namespace BookEShopWeb.Areas.Admin.Controllers
 {
@@ -12,6 +14,10 @@ namespace BookEShopWeb.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+
+        [BindProperty]
+        public OrderVM OrderVM { get; set; }
+
         public OrderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -21,6 +27,16 @@ namespace BookEShopWeb.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Details(int orderId)
+        {
+            OrderVM = new OrderVM()
+            {
+                OrderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == orderId, includeProperties: "ApplicationUser"),
+                OrderDetail = _unitOfWork.OrderDetail.GetAll(u => u.Id == orderId, includeProperties: "Product"),
+            };
+            return View(OrderVM);
         }
 
         #region API CALLS
