@@ -36,11 +36,11 @@ namespace BookEShop.DataAccess.Repository
             }
         }
 
-        public void UpdateStripePaymentId(int id, string sessioId, string? paymentIntentId)
+        public void UpdateStripePaymentId(int id, string sessionId, string? paymentIntentId)
         {
             var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
 
-            orderFromDb.SessionId = sessioId;
+            orderFromDb.SessionId = sessionId;
             orderFromDb.PaymentIntentId = paymentIntentId;
 
         }

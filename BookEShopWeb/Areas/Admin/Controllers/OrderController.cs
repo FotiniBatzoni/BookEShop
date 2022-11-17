@@ -1,11 +1,14 @@
-﻿using BookEShop.DataAccess.Repository;
+﻿using System.Security.Claims;
+using BookEShop.DataAccess.Repository;
 using BookEShop.Models;
 using BookEShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookEShopWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class OrderController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -26,7 +29,17 @@ namespace BookEShopWeb.Areas.Admin.Controllers
         {
             IEnumerable<OrderHeader> orderHeaders;
 
-            orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
+            if (User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
+            {
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(includeProperties: "ApplicationUser");
+            }
+            else
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                orderHeaders = _unitOfWork.OrderHeader.GetAll(u=>u.user == claim.Value,includeProperties: "ApplicationUser");
+            }
+        
 
             switch (status)
             {

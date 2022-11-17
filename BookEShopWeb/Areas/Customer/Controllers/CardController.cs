@@ -90,7 +90,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
 
 
             ShoppingCardVM.OrderHeader.OrderDate = System.DateTime.Now;
-            ShoppingCardVM.OrderHeader.ApplicationUserId = claim.Value;
+            ShoppingCardVM.OrderHeader.user = claim.Value;
 
 
             foreach (var cart in ShoppingCardVM.ListCard)
@@ -101,7 +101,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             }
             ApplicationUser applicationUser = _unitOfWork.ApplicationUser.GetFirstOrDefault(u => u.Id == claim.Value);
 
-            if (applicationUser.CompanyId.Equals(null) )
+            if (applicationUser.CompanyId == null )
             {
                 ShoppingCardVM.OrderHeader.PaymentStatus = SD.PaymentStatusPending;
                 ShoppingCardVM.OrderHeader.OrderStatus = SD.StatusPending;
@@ -128,10 +128,10 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             }
 
 
-            if (applicationUser.CompanyId.Equals(null))
+            if (applicationUser.CompanyId==null)
             {
                 //stripe settings 
-                var domain = "https://localhost:44300/";
+                var domain = "https://localhost:44350/";
                 var options = new SessionCreateOptions
                 {
                     PaymentMethodTypes = new List<string>
@@ -141,7 +141,9 @@ namespace BookEShopWeb.Areas.Customer.Controllers
                     LineItems = new List<SessionLineItemOptions>(),
                     Mode = "payment",
                     SuccessUrl = domain + $"customer/cart/OrderConfirmation?id={ShoppingCardVM.OrderHeader.Id}",
-                    CancelUrl = domain + $"customer/cart/index",
+                    CancelUrl = domain + $"Customer/Cart/Index",
+
+
                 };
 
                 foreach (var item in ShoppingCardVM.ListCard)
@@ -196,7 +198,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             }
             //_emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Book E-Shop", "<p>New Order Created</p>");
             List<ShoppingCard> shoppingCarts = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId ==
-            orderHeader.ApplicationUserId).ToList();
+            orderHeader.user).ToList();
             _unitOfWork.ShoppingCard.RemoveRange(shoppingCarts);
             _unitOfWork.Save();
             return View(id);

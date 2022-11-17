@@ -133,7 +133,6 @@ namespace BookEShop.DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ApplicationUserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Carrier")
@@ -167,6 +166,9 @@ namespace BookEShop.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TrackingNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("user")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -511,9 +513,7 @@ namespace BookEShop.DataAccess.Migrations
                 {
                     b.HasOne("BookEShop.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ApplicationUserId");
 
                     b.Navigation("ApplicationUser");
                 });

@@ -11,14 +11,17 @@ namespace BookEShop.Models
 {
     public class OrderHeader
     {
+        [Key]
         public int Id { get; set; }
 
-        public string ApplicationUserId {get; set;}
-        [ForeignKey("ApplicationUserId")]
-        [ValidateNever]
+        // [Required]
+        // public string ApplicationUserId {get; set;}
 
+        public string? user { get; set; }
+        // [ForeignKey("ApplicationUserId")]
+        //[ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }    
-        
+
 
         [Required]
         public DateTime OrderDate { get; set; }
