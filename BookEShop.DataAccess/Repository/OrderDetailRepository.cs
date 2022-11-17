@@ -21,6 +21,7 @@ namespace BookEShop.DataAccess.Repository
         public void Update(OrderDetail obj)
         {
             _db.OrderDetails.Update(obj);
+
         }
 
     }

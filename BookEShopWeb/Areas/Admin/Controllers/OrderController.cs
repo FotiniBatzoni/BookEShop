@@ -39,6 +39,31 @@ namespace BookEShopWeb.Areas.Admin.Controllers
             return View(OrderVM);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateOrderDetail()
+        {
+      
+            var orderHeaderFromDb = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id, tracked:false);
+
+            if(OrderVM.OrderHeader.Carrier != null)
+            {
+                orderHeaderFromDb.Carrier = OrderVM.OrderHeader.Carrier;
+            }
+            if (OrderVM.OrderHeader.TrackingNumber != null)
+            {
+                orderHeaderFromDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
+            }
+            
+            _unitOfWork.OrderHeader.Update(orderHeaderFromDb);
+
+            _unitOfWork.Save();
+
+            TempData["Success"] = "Order Details Updated Successfully";
+
+            return RedirectToAction("Details", "Order", new { orderId=orderHeaderFromDb.Id });
+        }
+
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll(string status)

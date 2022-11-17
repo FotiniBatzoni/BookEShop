@@ -2,6 +2,7 @@
 @using BookEShop.Utility;
 
 <form method="post">
+	<input asp-for="OrderHeader.Id" hidden />
 	<br />
 	<div class="container">
 		<div class="card">
@@ -27,12 +28,12 @@
 								<div class="col-9">
 									@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.Name" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.Name" type="text" class="form-control" readonly/>
 										<span asp-validation-for="OrderHeader.ApplicationUser.Name" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.Name" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.Name" readonly type="text" class="form-control" readonly />								
 									}
 			
 								</div>
@@ -42,12 +43,12 @@
 								<div class="col-9">
 								@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.PhoneNumber" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.PhoneNumber" type="text" class="form-control" readonly/>
 										<span asp-validation-for="OrderHeader.ApplicationUser.PhoneNumber" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.PhoneNumber" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.PhoneNumber" readonly type="text" class="form-control" readonly />								
 									}
 								</div>
 							</div>
@@ -56,12 +57,12 @@
 								<div class="col-9">
 								@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.StreetAddress" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.StreetAddress" type="text" class="form-control" readonly/>
 										<span asp-validation-for="OrderHeader.ApplicationUser.StreetAddress" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.StreetAddress" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.StreetAddress" readonly type="text" class="form-control" readonly/>								
 									}
 								</div>
 							</div>
@@ -70,12 +71,12 @@
 								<div class="col-9">
 								@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.City" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.City" type="text" class="form-control" readonly/>
 										<span asp-validation-for="OrderHeader.ApplicationUser.City" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.City" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.City" readonly type="text" class="form-control" readonly/>								
 									}
 								</div>
 							</div>
@@ -84,12 +85,12 @@
 								<div class="col-9">
 								@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.State" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.State" type="text" class="form-control" readonly/>
 										<span asp-validation-for="OrderHeader.ApplicationUser.State" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.State" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.State" readonly type="text" class="form-control" readonly/>								
 									}
 								</div>
 							</div>
@@ -98,12 +99,12 @@
 								<div class="col-9">
 								@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.PostalCode" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.PostalCode" type="text" class="form-control" readonly />
 										<span asp-validation-for="OrderHeader.ApplicationUser.PostalCode" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.PostalCode" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.PostalCode" readonly type="text" class="form-control" readonly />								
 									}
 								</div>
 							</div>
@@ -112,19 +113,19 @@
 								<div class="col-9">
 								@if(User.IsInRole(SD.Role_Admin) || User.IsInRole(SD.Role_Employee))
 									{
-										<input asp-for="OrderHeader.ApplicationUser.Email" type="text" class="form-control" />
+										<input asp-for="OrderHeader.ApplicationUser.Email" type="text" class="form-control" readonly/>
 										<span asp-validation-for="OrderHeader.ApplicationUser.Email" class="text-danger"></span>
 									}
 									else
 									{
-										<input asp-for="OrderHeader.ApplicationUser.Email" readonly type="text" class="form-control" />								
+										<input asp-for="OrderHeader.ApplicationUser.Email" readonly type="text" class="form-control" readonly/>								
 									}
 								</div>
 							</div>
 							<div class="row my-1">
 								<div class="col-3">Order Date</div>
 								<div class="col-9">
-									<input value="@Model.OrderHeader.OrderDate.ToShortDateString()" readonly type="text" class="form-control" />	
+									<input value="@Model.OrderHeader.OrderDate.ToShortDateString()" readonly type="text" class="form-control" readonly />	
 								</div>
 							</div>
 							<div class="row my-1">
@@ -200,7 +201,7 @@
 									<input asp-for="OrderHeader.PaymentStatus"  type="text" readonly class="form-control" />
 								</div>
 							</div>
-							<input type="submit" class="btn btn-warning form-control my-1" value="Update Order Details" />
+							<input type="submit" asp-action="UpdateOrderDetail" class="btn btn-warning form-control my-1" value="Update Order Details" />
 
 
 						</div>
