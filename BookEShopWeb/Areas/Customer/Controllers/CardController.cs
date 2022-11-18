@@ -223,6 +223,8 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             if (cart.Count <= 1)
             {
                 _unitOfWork.ShoppingCard.Remove(cart);
+                var count = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == cart.ApplicationUserId).ToList().Count-1;
+                HttpContext.Session.SetInt32(SD.SessionCard, count);
             }
             else
             {
@@ -237,6 +239,9 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             var cart = _unitOfWork.ShoppingCard.GetFirstOrDefault(c => c.Id == cartId);
             _unitOfWork.ShoppingCard.Remove(cart);
             _unitOfWork.Save();
+
+            var count = _unitOfWork.ShoppingCard.GetAll(u=>u.ApplicationUserId == cart.ApplicationUserId).ToList().Count;
+            HttpContext.Session.SetInt32(SD.SessionCard, count);
             return RedirectToAction(nameof(Index));
         }
 
