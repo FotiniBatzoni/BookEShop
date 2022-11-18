@@ -46,24 +46,12 @@
                 Manage Order
             </a>
         </li>
-
-        @if(HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCard) != null)
-        {
-             <li class="nav-item">
-                <a class=nav-link asp-area="Customer" asp-controller="Card" asp-action="Index">
-                    <i class="bi bi-cart"></i> &nbsp;
-                    (@HttpContextAccessor.HttpContext.Session.GetInt32(SD.SessionCard))
-                 </a>
-              </li>
-       }
-      else
-      {
            <li class="nav-item">
               <a class=nav-link asp-area="Customer" asp-controller="Card" asp-action="Index">
-                    <i class="bi bi-cart"></i> &nbsp; (0)
+                  @await Component.InvokeAsync("ShoppingCard")
               </a>
            </li>                            
-        }
+  
        </ul>
       <partial name="_LoginPartial" />
       <form class="d-flex">
