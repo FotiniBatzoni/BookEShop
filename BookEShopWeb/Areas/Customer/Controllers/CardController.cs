@@ -7,6 +7,7 @@ using Stripe.Checkout;
 using System.Collections.Generic;
 using System.Security.Claims;
 using BookEShop.DataAccess.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace BookEShopWeb.Areas.Customer.Controllers
 {
@@ -15,14 +16,16 @@ namespace BookEShopWeb.Areas.Customer.Controllers
     public class CardController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
         [BindProperty]
         public ShoppingCardVM ShoppingCardVM { get; set; }
 
         public int OrderTotal { get; set; }
 
-        public CardController(IUnitOfWork unitOfWork)
+        public CardController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
+            _emailSender = emailSender; 
         }
         public IActionResult Index()
         {
@@ -197,7 +200,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
                     _unitOfWork.Save();
                 }
             }
-            //_emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Book E-Shop", "<p>New Order Created</p>");
+            _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Book E-Shop", "<p>New Order Created</p>");
             List<ShoppingCard> shoppingCarts = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId ==
             orderHeader.user).ToList();
             _unitOfWork.ShoppingCard.RemoveRange(shoppingCarts);

@@ -23,7 +23,7 @@ namespace BookEShop.Utility
             using (var emailClient = new SmtpClient())
             {
                emailClient.Connect("smtp.gmail.com",587, MailKit.Security.SecureSocketOptions.StartTls);
-                emailClient.Authenticate("f.batzoni@gmail.com", "m1l@nkountera");
+                emailClient.Authenticate("f.batzoni@gmail.com", "cgwsykebuhhpzepw");
                 emailClient.Send(emailToSend);
                 emailClient.Disconnect(true);
             }
