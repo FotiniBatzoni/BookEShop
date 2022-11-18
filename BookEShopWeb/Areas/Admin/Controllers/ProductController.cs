@@ -3,6 +3,8 @@ using BookEShop.DataAccess.Repository;
 using BookEShop.DataAccess.Repository.IRepository;
 using BookEShop.Models;
 using BookEShop.Models.ViewModels;
+using BookEShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
@@ -10,6 +12,7 @@ using System.Diagnostics;
 namespace BookEShopWeb.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

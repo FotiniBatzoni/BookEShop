@@ -2,12 +2,15 @@
 using BookEShop.DataAccess.Repository;
 using BookEShop.DataAccess.Repository.IRepository;
 using BookEShop.Models;
+using BookEShop.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace BookEShopWeb.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
