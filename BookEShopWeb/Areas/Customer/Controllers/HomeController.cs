@@ -2,7 +2,9 @@
 using BookEShop.DataAccess.Repository;
 using BookEShop.Models;
 using BookEShop.Models.ViewModels;
+using BookEShop.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Linq;
@@ -54,13 +56,18 @@ namespace BookEShopWeb.Controllers
             if(cardFromDb == null)
             {
                 _unitOfWork.ShoppingCard.Add(shoppingCard);
+
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(SD.SessionCard,
+                    _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId == claim.Value).ToList().Count);
             }
             else
             {
                 _unitOfWork.ShoppingCard.IncrementCount(cardFromDb,shoppingCard.Count);
+
+                _unitOfWork.Save();
             }
          
-            _unitOfWork.Save();
 
             return RedirectToAction("Index");
         }
