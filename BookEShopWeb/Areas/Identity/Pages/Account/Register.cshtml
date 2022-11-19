@@ -1,10 +1,17 @@
 ﻿@page
+@using BookEShop.Utility
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
 }
+@if (User.IsInRole(SD.Role_Admin)){
+    <h1 class="pt-4">Register - ADMIN PORTAL</h1>
+}
+else
+{
+    <h1 class="pt-4">@ViewData["Title"]</h1>
+}
 
-<h1 class="pt-4">@ViewData["Title"]</h1>
 
 <div class="row pt-4">
     <div class="col-md-7 ">
@@ -58,7 +65,9 @@
                 <label asp-for="Input.ConfirmPassword"></label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-             <div class="form-floating py-2 col-6">
+            @if (User.IsInRole(SD.Role_Admin))
+            {
+              <div class="form-floating py-2 col-6">
                 <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select">
                     <option disabled selected>-Select Role</option>
                 </select>
@@ -67,10 +76,13 @@
                 <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" style="display:none;" class="form-select">
                     <option disabled selected>-Select Company</option>
                 </select>
-            </div>
+            </div>               
+            }
+
             <button id="registerSubmit" type="submit" class="w-100 btn btn-primary">Register</button>
         </form>
     </div>
+    @if(!User.IsInRole(SD.Role_Admin)){
     <div class="col-md-5">
         <section>
             <h3>Use another service to register.</h3>
@@ -101,6 +113,7 @@
             }
         </section>
     </div>
+    }
 </div>
 
 @section Scripts {
