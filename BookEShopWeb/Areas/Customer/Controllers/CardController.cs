@@ -203,6 +203,7 @@ namespace BookEShopWeb.Areas.Customer.Controllers
             _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order - Book E-Shop", "<p>New Order Created</p>");
             List<ShoppingCard> shoppingCarts = _unitOfWork.ShoppingCard.GetAll(u => u.ApplicationUserId ==
             orderHeader.user).ToList();
+            HttpContext.Session.Clear();
             _unitOfWork.ShoppingCard.RemoveRange(shoppingCarts);
             _unitOfWork.Save();
             return View(id);
